@@ -34,8 +34,8 @@
 ;;--------------
 ;; Magit
 ;;--------------
-(eval-after-load 'magit
-  (setq magit-view-git-manual-method 'woman))
+;;(eval-after-load 'magit
+;;  (setq magit-view-git-manual-method 'woman))
 
 ;;-----------------
 ;; Muse
