@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company)))
+   '(cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -53,13 +53,6 @@
 (require 'yasnippet)
 (yas-reload-all)
 (add-hook 'prog-mode-hook 'yas-minor-mode)
-;;-------------------
-;; Company
-;;------------------
-(add-hook 'prog-mode-hook 'company-mode)
-(define-key prog-mode-map (kbd "C-M-i") 'company-complete)
-(eval-after-load 'comapny '(define-key company-mode-map (kbd "<C-tab>") 'company-complete))
-(eval-after-load 'company '(add-to-list 'company-backends 'company-capf))
 
 ;;------------------
 ;; Java-lsp
@@ -100,6 +93,16 @@
   (yas-global-mode))
 
 ;; (eval-after-load 'lsp-mode (setq 'lsp-modeline-code-actions-segments '(icon name)))
+
+;;-------------------
+;; Company (should be called after lsp-mode?)
+;;------------------
+(add-hook 'prog-mode-hook 'company-mode)
+(define-key prog-mode-map (kbd "C-M-i") 'company-complete)
+(eval-after-load 'comapny '(define-key company-mode-map (kbd "<C-tab>") 'company-complete))
+(eval-after-load 'company '(define-key company-active-map (kbd "<tab>") 'company-complete))
+(eval-after-load 'company '(add-to-list 'company-backends 'company-capf))
+(setq company-minimum-prefix-length 1)
 
 ;;---------------
 ;; Irony
