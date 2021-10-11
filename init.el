@@ -81,6 +81,8 @@
 ;; this must be called after to let which-key see the new prefix, think
 ;(add-hook 'lsp-mode-hook 'lsp-enable-which-key-integration)
 (define-key lsp-mode-map (kbd "M-RET") 'lsp-execute-code-action)
+;;suggested by lsp-java doc
+(setq lsp-completion-enable-additional-text-edit nil)
 
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
