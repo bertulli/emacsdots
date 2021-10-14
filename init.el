@@ -62,10 +62,10 @@
       (java-path (concat (getenv "JAVA_HOME") "/bin/java")))
     (setq lsp-java-java-path java-path ;;(concat (getenv "JAVA_HOME") "/bin/java")
 	  lsp-java-import-gradle-java-home java-path;; (concat (getenv "JAVA_HOME") "/bin/java")
-	  lsp-java-configuration-runtimes ( [(:name "JavaSE-16"
-                                                       :path "/usr/lib/jvm/java-16-openjdk"
-                                                       :default t)])
-	  lsp-java-vmargs (list "-noverify" "--enable-preview")
+	  ;; lsp-java-configuration-runtimes ( '[(:name "JavaSE-16"
+          ;;                                              :path "/usr/lib/jvm/java-16-openjdk"
+          ;;                                              :default t)])
+	  ;; lsp-java-vmargs (list "-noverify" "--enable-preview")
       )
     )
 
@@ -73,7 +73,7 @@
 ;; Gradle
 ;;---------------
 (require 'gradle-mode)
-(add-hook 'java-mode-hook 'gradle-mode) ;;'(lambda() (gradle-mode 1))
+;;(add-hook 'java-mode-hook 'gradle-mode) ;;'(lambda() (gradle-mode 1))
 (defun my-gradle-build-and-run ()
   "Execute the gradle build and run commands."
   (interactive)
