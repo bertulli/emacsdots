@@ -58,6 +58,16 @@
 ;; Java-lsp
 ;;-----
 (require 'lsp-java)
+(let ((java-home (getenv "JAVA_HOME"))
+      (java-path (concat (getenv "JAVA_HOME") "/bin/java")))
+    (setq lsp-java-java-path java-path ;;(concat (getenv "JAVA_HOME") "/bin/java")
+	  lsp-java-import-gradle-java-home java-path;; (concat (getenv "JAVA_HOME") "/bin/java")
+	  lsp-java-configuration-runtimes ( [(:name "JavaSE-16"
+                                                       :path "/usr/lib/jvm/java-16-openjdk"
+                                                       :default t)])
+	  lsp-java-vmargs (list "-noverify" "--enable-preview")
+      )
+    )
 
 ;;--------------
 ;; Gradle
