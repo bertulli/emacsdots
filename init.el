@@ -59,11 +59,33 @@
 ;; Maven
 ;;-------------------
 (require 'mvn)
+(defun mvn-run ()
+    "Run the project main, based on the POM.xml
+
+Looks up in the POM.xml the executable to launch, then executes it.  To run a differnt executable or main method, mvn exec:exec must be called from command line"
+  (interactive)
+  (mvn "exec:exec")
+  )
+
+;; not sure this is gonna work
+
+;; (defun my-java-run ()
+;;   "Run the run.sh script in the project root"
+;;   (interactive)
+;;   (  (let ((project-root-directory (mvn-find-root '() mvn-build-file-name)))
+;;     (if project-root-directory
+;;         (shell-command (concat project-root-directory "run.sh"))
+;;       (message "Couldn't find a maven project.")))))
+
+
 
 ;;---------------
 ;; Maven test mode
 ;;---------------
 (require 'maven-test-mode)
+
+;; defined in Maven section
+;;(define-key maven-test-mode-map (kbd "C-c C-r") 'mvn-run)
 
 ;;------------------
 ;; Java-lsp
@@ -79,6 +101,55 @@
 	  ;; lsp-java-vmargs (list "-noverify" "--enable-preview")
       )
     )
+
+;;-------------
+;; Dap mode
+;;--------------
+(require 'dap-mode)
+(eval-after-load 'lsp-mode
+  (dap-auto-configure-mode))
+(defun my-dap-debug-compile-run ()
+  "Compile the project using maven 'mvn compile' and Run it.
+
+Uses the simple Java Run Configuration"
+  (interactive)
+  (dap-debug   (list :name "Java Run Configuration"
+        :type "java"
+        :request "launch"
+        :args ""
+        :cwd nil
+        :stopOnEntry :json-false
+        :host "localhost"
+        :request "launch"
+        :modulePaths []
+        :classPaths nil
+        :projectName nil
+        :mainClass nil
+	:dap-compilation "mvn compile"))
+  )
+
+(defun my-dap-debug-run ()
+  "Run the project.
+
+Uses the simple Java Run Configuration"
+  (interactive)
+  (dap-debug   (list :name "Java Run Configuration"
+        :type "java"
+        :request "launch"
+        :args ""
+        :cwd nil
+        :stopOnEntry :json-false
+        :host "localhost"
+        :request "launch"
+        :modulePaths []
+        :classPaths nil
+        :projectName nil
+        :mainClass nil
+	))
+  )
+
+(define-key dap-mode-map (kbd "C-c C-c C-r") 'my-dap-debug-compile-run)
+(define-key dap-mode-map (kbd "C-c C-r") 'my-dap-debug-run)
 
 ;;--------------
 ;; Gradle
@@ -117,6 +188,13 @@
 
 ;; (eval-after-load 'lsp-mode (setq 'lsp-modeline-code-actions-segments '(icon name)))
 
+;;---------------
+;; lsp-ui
+;;--------------
+(eval-after-load 'lsp
+  (eval-after-load 'lsp-ui
+    (setq lsp-ui-sideline-show-hover t)
+    ))
 ;;-------------------
 ;; Company (should be called after lsp-mode?)
 ;;------------------
