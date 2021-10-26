@@ -148,8 +148,8 @@ Uses the simple Java Run Configuration"
 	))
   )
 
-(define-key dap-mode-map (kbd "C-c C-c C-r") 'my-dap-debug-compile-run)
-(define-key dap-mode-map (kbd "C-c C-r") 'my-dap-debug-run)
+(define-key maven-test-mode-map (kbd "C-c C-c C-r") 'my-dap-debug-compile-run)
+(define-key maven-test-mode-map (kbd "C-c C-r") 'my-dap-debug-run)
 
 ;;--------------
 ;; Gradle
