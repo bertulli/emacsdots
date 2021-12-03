@@ -30,6 +30,19 @@
 (which-key-mode)
 (global-flycheck-mode)
 
+(defun my/ide-setup ()
+  (interactive)
+  "Set up an environment like an IDE."
+  (progn
+    (lsp-treemacs-symbols)
+    (treemacs)))
+
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      treemacs-space-between-root-nodes nil
+      company-idle-delay 0.5
+      company-minimum-prefix-length 2
+      lsp-idle-delay 0.5)  ;; clangd is fast
 
 ;;--------------
 ;; Magit
@@ -91,6 +104,7 @@ Looks up in the POM.xml the executable to launch, then executes it.  To run a di
 ;; Java-lsp
 ;;-----
 (require 'lsp-java)
+(require 'dap-java)
 (let ((java-home (getenv "JAVA_HOME"))
       (java-path (concat (getenv "JAVA_HOME") "/bin/java")))
     (setq lsp-java-java-path java-path ;;(concat (getenv "JAVA_HOME") "/bin/java")
@@ -125,7 +139,9 @@ Uses the simple Java Run Configuration"
         :classPaths nil
         :projectName nil
         :mainClass nil
-	:dap-compilation "mvn compile"))
+	:dap-compilation "mvn compile"
+	:dap-compilation-dir (mvn-find-root mvn-build-file-name))
+	       )
   )
 
 (defun my-dap-debug-run ()
@@ -151,6 +167,14 @@ Uses the simple Java Run Configuration"
 (define-key maven-test-mode-map (kbd "C-c C-c C-r") 'my-dap-debug-compile-run)
 (define-key maven-test-mode-map (kbd "C-c C-r") 'my-dap-debug-run)
 
+(dap-register-debug-template "My Runner"
+                             (list :type "java"
+                                   :request "launch"
+                                   :args ""
+                                   :vmArgs "-ea -Dmyapp.instance.name=myapp_1"
+                                   :projectName "myapp"
+                                   :mainClass "com.domain.AppRunner"
+                                   :env '(("DEV" . "1"))))
 ;;--------------
 ;; Gradle
 ;;---------------
@@ -195,6 +219,7 @@ Uses the simple Java Run Configuration"
   (eval-after-load 'lsp-ui
     (setq lsp-ui-sideline-show-hover t)
     ))
+
 ;;-------------------
 ;; Company (should be called after lsp-mode?)
 ;;------------------
