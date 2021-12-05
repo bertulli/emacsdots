@@ -60,6 +60,10 @@
 ;;------------
 (add-hook 'org-mode-hook 'visual-line-mode)
 (setf org-highlight-links '(bracket plain radio tag date footnote))
+;; these keybindings are suggested by the org guide
+;;(global-set-key (kbd "C-c l") #'org-store-link) ;; it conflicts with lsp-mode
+(global-set-key (kbd "C-c a") #'org-agenda)
+(global-set-key (kbd "C-c c") #'org-capture)
 ;;-----------------
 ;; YASnippet
 ;;-----------------
