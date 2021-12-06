@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company)))
+   '(eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -104,81 +104,105 @@ Looks up in the POM.xml the executable to launch, then executes it.  To run a di
 ;; defined in Maven section
 ;;(define-key maven-test-mode-map (kbd "C-c C-r") 'mvn-run)
 
+;; ;;------------------
+;; ;; Java-lsp
+;; ;;-----
+;; (require 'lsp-java)
+;; (require 'dap-java)
+;; (let ((java-home (getenv "JAVA_HOME"))
+;;       (java-path (concat (getenv "JAVA_HOME") "/bin/java")))
+;;     (setq lsp-java-java-path java-path ;;(concat (getenv "JAVA_HOME") "/bin/java")
+;; 	  lsp-java-import-gradle-java-home java-path;; (concat (getenv "JAVA_HOME") "/bin/java")
+;; 	  ;; lsp-java-configuration-runtimes ( '[(:name "JavaSE-16"
+;;           ;;                                              :path "/usr/lib/jvm/java-16-openjdk"
+;;           ;;                                              :default t)])
+;; 	  ;; lsp-java-vmargs (list "-noverify" "--enable-preview")
+;;       )
+;;     )
+
+;; ;;-------------
+;; ;; Dap mode
+;; ;;--------------
+;; (require 'dap-mode)
+;; (eval-after-load 'lsp-mode
+;;   (dap-auto-configure-mode))
+;; (defun my-dap-debug-compile-run ()
+;;   "Compile the project using maven 'mvn compile' and Run it.
+
+;; Uses the simple Java Run Configuration"
+;;   (interactive)
+;;   (dap-debug   (list :name "Java Run Configuration"
+;;         :type "java"
+;;         :request "launch"
+;;         :args ""
+;;         :cwd nil
+;;         :stopOnEntry :json-false
+;;         :host "localhost"
+;;         :request "launch"
+;;         :modulePaths []
+;;         :classPaths nil
+;;         :projectName nil
+;;         :mainClass nil
+;; 	:dap-compilation "mvn compile"
+;; 	:dap-compilation-dir (mvn-find-root mvn-build-file-name))
+;; 	       )
+;;   )
+
+;; (defun my-dap-debug-run ()
+;;   "Run the project.
+
+;; Uses the simple Java Run Configuration"
+;;   (interactive)
+;;   (dap-debug   (list :name "Java Run Configuration"
+;;         :type "java"
+;;         :request "launch"
+;;         :args ""
+;;         :cwd nil
+;;         :stopOnEntry :json-false
+;;         :host "localhost"
+;;         :request "launch"
+;;         :modulePaths []
+;;         :classPaths nil
+;;         :projectName nil
+;;         :mainClass nil
+;; 	))
+;;   )
+
+;; (define-key maven-test-mode-map (kbd "C-c C-c C-r") 'my-dap-debug-compile-run)
+;; (define-key maven-test-mode-map (kbd "C-c C-r") 'my-dap-debug-run)
+
+;; (dap-register-debug-template "My Runner"
+;;                              (list :type "java"
+;;                                    :request "launch"
+;;                                    :args ""
+;;                                    :vmArgs "-ea -Dmyapp.instance.name=myapp_1"
+;;                                    :projectName "myapp"
+;;                                    :mainClass "com.domain.AppRunner"
+;;                                    :env '(("DEV" . "1"))))
+
 ;;------------------
-;; Java-lsp
-;;-----
-(require 'lsp-java)
-(require 'dap-java)
-(let ((java-home (getenv "JAVA_HOME"))
-      (java-path (concat (getenv "JAVA_HOME") "/bin/java")))
-    (setq lsp-java-java-path java-path ;;(concat (getenv "JAVA_HOME") "/bin/java")
-	  lsp-java-import-gradle-java-home java-path;; (concat (getenv "JAVA_HOME") "/bin/java")
-	  ;; lsp-java-configuration-runtimes ( '[(:name "JavaSE-16"
-          ;;                                              :path "/usr/lib/jvm/java-16-openjdk"
-          ;;                                              :default t)])
-	  ;; lsp-java-vmargs (list "-noverify" "--enable-preview")
-      )
-    )
+;; Eglot
+;;------------------
+(require 'eglot)
+(add-hook 'c-mode-hook #'eglot-ensure )
+(add-hook 'c++-mode-hook #'eglot-ensure)
+(add-hook 'java-mode-hook #'eglot-ensure)
+;; found on https://cestlaz.github.io/post/using-emacs-74-eglot/
+;; the regexp should match files like org.eclipse.equinox.launcher_1.6.300.v20210813-1054.jar
+(defconst my-eclipse-jdt-home
+  (concat "/home/alessandro/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/"
+	  (car (seq-filter (lambda (string) (string-match-p "org.eclipse.equinox.launcher[^.].*jar$" string))
+			   (directory-files "~/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/")))
+	  ))
 
-;;-------------
-;; Dap mode
-;;--------------
-(require 'dap-mode)
-(eval-after-load 'lsp-mode
-  (dap-auto-configure-mode))
-(defun my-dap-debug-compile-run ()
-  "Compile the project using maven 'mvn compile' and Run it.
-
-Uses the simple Java Run Configuration"
-  (interactive)
-  (dap-debug   (list :name "Java Run Configuration"
-        :type "java"
-        :request "launch"
-        :args ""
-        :cwd nil
-        :stopOnEntry :json-false
-        :host "localhost"
-        :request "launch"
-        :modulePaths []
-        :classPaths nil
-        :projectName nil
-        :mainClass nil
-	:dap-compilation "mvn compile"
-	:dap-compilation-dir (mvn-find-root mvn-build-file-name))
-	       )
-  )
-
-(defun my-dap-debug-run ()
-  "Run the project.
-
-Uses the simple Java Run Configuration"
-  (interactive)
-  (dap-debug   (list :name "Java Run Configuration"
-        :type "java"
-        :request "launch"
-        :args ""
-        :cwd nil
-        :stopOnEntry :json-false
-        :host "localhost"
-        :request "launch"
-        :modulePaths []
-        :classPaths nil
-        :projectName nil
-        :mainClass nil
-	))
-  )
-
-(define-key maven-test-mode-map (kbd "C-c C-c C-r") 'my-dap-debug-compile-run)
-(define-key maven-test-mode-map (kbd "C-c C-r") 'my-dap-debug-run)
-
-(dap-register-debug-template "My Runner"
-                             (list :type "java"
-                                   :request "launch"
-                                   :args ""
-                                   :vmArgs "-ea -Dmyapp.instance.name=myapp_1"
-                                   :projectName "myapp"
-                                   :mainClass "com.domain.AppRunner"
-                                   :env '(("DEV" . "1"))))
+(defun my-eglot-eclipse-jdt-contact (interactive)
+  "Contact with the jdt server input INTERACTIVE."
+  (let ((cp (getenv "CLASSPATH")))
+    (setenv "CLASSPATH" (concat cp ":" my-eclipse-jdt-home))
+    (unwind-protect (eglot--eclipse-jdt-contact nil)
+      (setenv "CLASSPATH" cp))))
+(setcdr (assq 'java-mode eglot-server-programs) #'my-eglot-eclipse-jdt-contact)
+;;(add-hook 'java-mode-hook 'eglot-ensure)
 ;;--------------
 ;; Gradle
 ;;---------------
@@ -191,38 +215,38 @@ Uses the simple Java Run Configuration"
 (define-key gradle-mode-map (kbd "C-c C-r") 'my-gradle-build-and-run)
 
 (define-key gradle-mode-map (kbd "C-c C-b") 'gradle-build)
-;;----------------
-;; Language Server Protocol
-;;--------------
-(add-hook 'java-mode-hook #'lsp)
-;; apparently, this must be done before loading in any way lsp-mode
-(setq lsp-keymap-prefix "C-c l")
-(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-;; this must be called after to let which-key see the new prefix, think
-;(add-hook 'lsp-mode-hook 'lsp-enable-which-key-integration)
-(define-key lsp-mode-map (kbd "M-RET") 'lsp-execute-code-action)
-;;suggested by lsp-java doc
-(setq lsp-completion-enable-additional-text-edit nil)
+;; ;;----------------
+;; ;; Language Server Protocol
+;; ;;--------------
+;; (add-hook 'java-mode-hook #'lsp)
+;; ;; apparently, this must be done before loading in any way lsp-mode
+;; (setq lsp-keymap-prefix "C-c l")
+;; (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+;; ;; this must be called after to let which-key see the new prefix, think
+;; ;(add-hook 'lsp-mode-hook 'lsp-enable-which-key-integration)
+;; (define-key lsp-mode-map (kbd "M-RET") 'lsp-execute-code-action)
+;; ;;suggested by lsp-java doc
+;; (setq lsp-completion-enable-additional-text-edit nil)
 
-(add-hook 'c-mode-hook 'lsp)
-(add-hook 'c++-mode-hook 'lsp)
+;; (add-hook 'c-mode-hook 'lsp)
+;; (add-hook 'c++-mode-hook 'lsp)
 
-;;copied from https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/
-;;probably is better
-(with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (require 'dap-cpptools)
-  (yas-global-mode))
+;; ;;copied from https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/
+;; ;;probably is better
+;; (with-eval-after-load 'lsp-mode
+;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+;;   (require 'dap-cpptools)
+;;   (yas-global-mode))
 
-;; (eval-after-load 'lsp-mode (setq 'lsp-modeline-code-actions-segments '(icon name)))
+;; ;; (eval-after-load 'lsp-mode (setq 'lsp-modeline-code-actions-segments '(icon name)))
 
-;;---------------
-;; lsp-ui
-;;--------------
-(eval-after-load 'lsp
-  (eval-after-load 'lsp-ui
-    (setq lsp-ui-sideline-show-hover t)
-    ))
+;; ;;---------------
+;; ;; lsp-ui
+;; ;;--------------
+;; (eval-after-load 'lsp
+;;   (eval-after-load 'lsp-ui
+;;     (setq lsp-ui-sideline-show-hover t)
+;;     ))
 
 ;;-------------------
 ;; Company (should be called after lsp-mode?)
