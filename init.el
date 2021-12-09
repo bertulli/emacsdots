@@ -190,7 +190,7 @@ Looks up in the POM.xml the executable to launch, then executes it.  To run a di
 ;; found on https://cestlaz.github.io/post/using-emacs-74-eglot/
 ;; the regexp should match files like org.eclipse.equinox.launcher_1.6.300.v20210813-1054.jar
 (defconst my-eclipse-jdt-home
-  (concat "/home/alessandro/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/"
+  (concat (expand-file-name "~/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/")
 	  (car (seq-filter (lambda (string) (string-match-p "org.eclipse.equinox.launcher[^.].*jar$" string))
 			   (directory-files "~/.emacs.d/.cache/lsp/eclipse.jdt.ls/plugins/")))
 	  ))
