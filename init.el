@@ -71,7 +71,12 @@
 (yas-reload-all)
 (add-hook 'prog-mode-hook 'yas-minor-mode)
 
-
+;;--------------
+;;Projectile
+;;-------------------
+(require 'projectile)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(projectile-mode +1)
 ;;----------------------
 ;; Maven
 ;;-------------------
