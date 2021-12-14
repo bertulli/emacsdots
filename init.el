@@ -192,6 +192,11 @@ Looks up in the POM.xml the executable to launch, then executes it.  To run a di
 (add-hook 'c-mode-hook #'eglot-ensure )
 (add-hook 'c++-mode-hook #'eglot-ensure)
 (add-hook 'java-mode-hook #'eglot-ensure)
+;;use flychech instead of flymake
+(add-to-list 'eglot-stay-out-of 'flymake)
+;;if not managed via global-flycheck-mode, uncomment
+;;(add-hook 'eglot-managed-mode-hook 'flycheck-mode)
+
 ;; found on https://cestlaz.github.io/post/using-emacs-74-eglot/
 ;; the regexp should match files like org.eclipse.equinox.launcher_1.6.300.v20210813-1054.jar
 (defconst my-eclipse-jdt-home
