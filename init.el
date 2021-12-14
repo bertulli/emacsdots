@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company)))
+   '(projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -69,7 +69,7 @@
 ;;-----------------
 (require 'yasnippet)
 (yas-reload-all)
-(add-hook 'prog-mode-hook 'yas-minor-mode)
+(yas-global-mode)
 
 ;;--------------
 ;;Projectile
@@ -208,6 +208,10 @@ Looks up in the POM.xml the executable to launch, then executes it.  To run a di
       (setenv "CLASSPATH" cp))))
 (setcdr (assq 'java-mode eglot-server-programs) #'my-eglot-eclipse-jdt-contact)
 ;;(add-hook 'java-mode-hook 'eglot-ensure)
+;;suggested by the repo
+(define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
+(define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
+(define-key eglot-mode-map (kbd "C-c h") 'eldoc)
 ;;--------------
 ;; Gradle
 ;;---------------
