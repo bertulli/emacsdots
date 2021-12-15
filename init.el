@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files '("~/agenda.org"))
  '(package-selected-packages
-   '(projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company)))
+   '(eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -51,6 +51,15 @@
 ;;(eval-after-load 'magit
 ;;  (setq magit-view-git-manual-method 'woman))
 
+;;---------------
+;; Eglot-java
+;;------------
+(eval-after-load 'eglot-java
+  (progn
+    (require 'eglot-java)
+    '(eglot-java-init)))
+(require 'cc-mode)
+(define-key java-mode-map (kbd "C-c j r") 'eglot-java-run-main)
 ;;-----------------
 ;; Muse
 ;;--------------
@@ -233,7 +242,7 @@ Uses the simple Java Run Configuration"
 ;;----------------
 ;; Language Server Protocol
 ;;--------------
-(add-hook 'java-mode-hook #'lsp)
+;;(add-hook 'java-mode-hook #'lsp)
 ;; apparently, this must be done before loading in any way lsp-mode
 (setq lsp-keymap-prefix "C-c l")
 (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
