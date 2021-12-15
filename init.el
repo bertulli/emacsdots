@@ -110,49 +110,49 @@ Looks up in the POM.xml the executable to launch, then executes it.  To run a di
 ;; defined in Maven section
 ;;(define-key maven-test-mode-map (kbd "C-c C-r") 'mvn-run)
 
-;; ;;------------------
-;; ;; Java-lsp
-;; ;;-----
-;; (require 'lsp-java)
-;; (require 'dap-java)
-;; (let ((java-home (getenv "JAVA_HOME"))
-;;       (java-path (concat (getenv "JAVA_HOME") "/bin/java")))
-;;     (setq lsp-java-java-path java-path ;;(concat (getenv "JAVA_HOME") "/bin/java")
-;; 	  lsp-java-import-gradle-java-home java-path;; (concat (getenv "JAVA_HOME") "/bin/java")
-;; 	  ;; lsp-java-configuration-runtimes ( '[(:name "JavaSE-16"
-;;           ;;                                              :path "/usr/lib/jvm/java-16-openjdk"
-;;           ;;                                              :default t)])
-;; 	  ;; lsp-java-vmargs (list "-noverify" "--enable-preview")
-;;       )
-;;     )
+;;------------------
+;; Java-lsp
+;;-----
+(require 'lsp-java)
+(require 'dap-java)
+(let ((java-home (getenv "JAVA_HOME"))
+      (java-path (concat (getenv "JAVA_HOME") "/bin/java")))
+    (setq lsp-java-java-path java-path ;;(concat (getenv "JAVA_HOME") "/bin/java")
+	  lsp-java-import-gradle-java-home java-path;; (concat (getenv "JAVA_HOME") "/bin/java")
+	   ;; lsp-java-configuration-runtimes ( '[(:name "JavaSE-11"
+           ;;                                              :path "/usr/lib/jvm/java-11-openjdk"
+           ;;                                              :default t)])
+	   ;; lsp-java-vmargs (list "-noverify" "--enable-preview")
+      )
+    )
 
-;; ;;-------------
-;; ;; Dap mode
-;; ;;--------------
-;; (require 'dap-mode)
-;; (eval-after-load 'lsp-mode
-;;   (dap-auto-configure-mode))
-;; (defun my-dap-debug-compile-run ()
-;;   "Compile the project using maven 'mvn compile' and Run it.
+;;-------------
+;; Dap mode
+;;--------------
+(require 'dap-mode)
+(eval-after-load 'lsp-mode
+  (dap-auto-configure-mode))
+(defun my-dap-debug-compile-run ()
+  "Compile the project using maven 'mvn compile' and Run it.
 
-;; Uses the simple Java Run Configuration"
-;;   (interactive)
-;;   (dap-debug   (list :name "Java Run Configuration"
-;;         :type "java"
-;;         :request "launch"
-;;         :args ""
-;;         :cwd nil
-;;         :stopOnEntry :json-false
-;;         :host "localhost"
-;;         :request "launch"
-;;         :modulePaths []
-;;         :classPaths nil
-;;         :projectName nil
-;;         :mainClass nil
-;; 	:dap-compilation "mvn compile"
-;; 	:dap-compilation-dir (mvn-find-root mvn-build-file-name))
-;; 	       )
-;;   )
+Uses the simple Java Run Configuration"
+  (interactive)
+  (dap-debug   (list :name "Java Run Configuration"
+        :type "java"
+        :request "launch"
+        :args ""
+        :cwd nil
+        :stopOnEntry :json-false
+        :host "localhost"
+        :request "launch"
+        :modulePaths []
+        :classPaths nil
+        :projectName nil
+        :mainClass nil
+	:dap-compilation "mvn compile"
+	:dap-compilation-dir (mvn-find-root mvn-build-file-name))
+	       )
+  )
 
 ;; (defun my-dap-debug-run ()
 ;;   "Run the project.
@@ -190,9 +190,9 @@ Looks up in the POM.xml the executable to launch, then executes it.  To run a di
 ;; Eglot
 ;;------------------
 (require 'eglot)
-(add-hook 'c-mode-hook #'eglot-ensure )
+(add-hook 'c-mode-hook #'eglot-ensure)
 (add-hook 'c++-mode-hook #'eglot-ensure)
-(add-hook 'java-mode-hook #'eglot-ensure)
+;;(add-hook 'java-mode-hook #'eglot-ensure)
 ;;use flychech instead of flymake
 (add-to-list 'eglot-stay-out-of 'flymake)
 ;;if not managed via global-flycheck-mode, uncomment
@@ -230,38 +230,38 @@ Looks up in the POM.xml the executable to launch, then executes it.  To run a di
 (define-key gradle-mode-map (kbd "C-c C-r") 'my-gradle-build-and-run)
 
 (define-key gradle-mode-map (kbd "C-c C-b") 'gradle-build)
-;; ;;----------------
-;; ;; Language Server Protocol
-;; ;;--------------
-;; (add-hook 'java-mode-hook #'lsp)
-;; ;; apparently, this must be done before loading in any way lsp-mode
-;; (setq lsp-keymap-prefix "C-c l")
-;; (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-;; ;; this must be called after to let which-key see the new prefix, think
-;; ;(add-hook 'lsp-mode-hook 'lsp-enable-which-key-integration)
-;; (define-key lsp-mode-map (kbd "M-RET") 'lsp-execute-code-action)
-;; ;;suggested by lsp-java doc
-;; (setq lsp-completion-enable-additional-text-edit nil)
+;;----------------
+;; Language Server Protocol
+;;--------------
+(add-hook 'java-mode-hook #'lsp)
+;; apparently, this must be done before loading in any way lsp-mode
+(setq lsp-keymap-prefix "C-c l")
+(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+;; this must be called after to let which-key see the new prefix, think
+(add-hook 'lsp-mode-hook 'lsp-enable-which-key-integration)
+(define-key lsp-mode-map (kbd "M-RET") 'lsp-execute-code-action)
+;;suggested by lsp-java doc
+(setq lsp-completion-enable-additional-text-edit nil)
 
-;; (add-hook 'c-mode-hook 'lsp)
-;; (add-hook 'c++-mode-hook 'lsp)
+;;(add-hook 'c-mode-hook 'lsp)
+;;(add-hook 'c++-mode-hook 'lsp)
 
-;; ;;copied from https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/
-;; ;;probably is better
-;; (with-eval-after-load 'lsp-mode
-;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-;;   (require 'dap-cpptools)
-;;   (yas-global-mode))
+;;copied from https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/
+;;probably is better
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (require 'dap-cpptools)
+  (yas-global-mode))
 
-;; ;; (eval-after-load 'lsp-mode (setq 'lsp-modeline-code-actions-segments '(icon name)))
+;; (eval-after-load 'lsp-mode (setq 'lsp-modeline-code-actions-segments '(icon name)))
 
-;; ;;---------------
-;; ;; lsp-ui
-;; ;;--------------
-;; (eval-after-load 'lsp
-;;   (eval-after-load 'lsp-ui
-;;     (setq lsp-ui-sideline-show-hover t)
-;;     ))
+;;---------------
+;; lsp-ui
+;;--------------
+(eval-after-load 'lsp
+  (eval-after-load 'lsp-ui
+    (setq lsp-ui-sideline-show-hover t)
+    ))
 
 ;;-------------------
 ;; Company (should be called after lsp-mode?)
