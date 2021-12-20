@@ -32,8 +32,8 @@
 (global-flycheck-mode)
 
 (defun my/ide-setup ()
-  (interactive)
   "Set up an environment like an IDE."
+  (interactive)
   (progn
     (lsp-treemacs-symbols)
     (treemacs)))
