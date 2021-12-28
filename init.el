@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files '("~/agenda.org"))
  '(package-selected-packages
-   '(ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
+   '(eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
  '(safe-local-variable-values
    '((projectile-project-configure-cmd . "cmake -S . -B build -D CMAKE_EXPORT_COMPILE_COMMANDS=ON")
      (projectile-project-configure-cmd . "cmake -B build -D CMAKE_EXPORT_COMPILE_COMMANDS=ON")
@@ -34,6 +34,8 @@
 (define-key prog-mode-map (kbd "C-c C-c") 'comment-or-uncomment-region)
 (which-key-mode)
 (global-flycheck-mode)
+(add-hook 'cmake-mode-hook 'eldoc-cmake-enable)
+
 
 (defun my/ide-setup ()
   "Set up an environment like an IDE."
