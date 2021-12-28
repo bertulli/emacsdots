@@ -57,6 +57,22 @@
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (setq ivy-count-format "(%d/%d) ")
+
+;;--------------
+;; Ace-window
+;;-------------
+(defun ace-window-manual-dispatch (arg)
+  "Calls `ace-window' with ARG asking for the dispatch, even if `aw-dispatch-always' is nil.
+
+This could be useful to use the advanced commands"
+  (interactive "p")
+(let ((aw-dispatch-always t))
+  (ace-window arg)
+  ))
+
+(global-set-key (kbd "M-o") 'ace-window)
+(ace-window-display-mode 1)
+(global-set-key (kbd "C-M-o") 'ace-window-manual-dispatch)
 ;;--------------
 ;; Magit
 ;;--------------
