@@ -36,6 +36,9 @@
 (global-flycheck-mode)
 (add-hook 'cmake-mode-hook 'eldoc-cmake-enable)
 
+(setq sentence-end-double-space nil)
+(show-paren-mode)
+
 
 (defun my/ide-setup ()
   "Set up an environment like an IDE."
