@@ -257,9 +257,6 @@ Uses the simple Java Run Configuration"
 ;; Eglot
 ;;------------------
 (require 'eglot)
-(add-hook 'c-mode-hook #'eglot-ensure)
-(add-hook 'c++-mode-hook #'eglot-ensure)
-;;(add-hook 'java-mode-hook #'eglot-ensure)
 ;;use flychech instead of flymake
 (add-to-list 'eglot-stay-out-of 'flymake)
 ;;if not managed via global-flycheck-mode, uncomment
@@ -280,7 +277,7 @@ Uses the simple Java Run Configuration"
     (unwind-protect (eglot--eclipse-jdt-contact nil)
       (setenv "CLASSPATH" cp))))
 (setcdr (assq 'java-mode eglot-server-programs) #'my-eglot-eclipse-jdt-contact)
-;;(add-hook 'java-mode-hook 'eglot-ensure)
+
 ;;suggested by the repo
 (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
 (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
@@ -300,7 +297,6 @@ Uses the simple Java Run Configuration"
 ;;----------------
 ;; Language Server Protocol
 ;;--------------
-;;(add-hook 'java-mode-hook #'lsp)
 ;; apparently, this must be done before loading in any way lsp-mode
 (setq lsp-keymap-prefix "C-c l")
 (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
@@ -310,8 +306,6 @@ Uses the simple Java Run Configuration"
 ;;suggested by lsp-java doc
 (setq lsp-completion-enable-additional-text-edit nil)
 
-;;(add-hook 'c-mode-hook 'lsp)
-;;(add-hook 'c++-mode-hook 'lsp)
 
 ;;copied from https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/
 ;;probably is better
@@ -321,6 +315,17 @@ Uses the simple Java Run Configuration"
   (yas-global-mode))
 
 ;; (eval-after-load 'lsp-mode (setq 'lsp-modeline-code-actions-segments '(icon name)))
+
+;;------------------
+;; Programing environment
+;;---------------------
+;;(add-hook 'c-mode-hook #'eglot-ensure)
+;;(add-hook 'c++-mode-hook #'eglot-ensure)
+;;(add-hook 'java-mode-hook #'eglot-ensure)
+;;(add-hook 'java-mode-hook #'lsp)
+;;(add-hook 'java-mode-hook 'eglot-ensure)
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
 
 ;;---------------
 ;; lsp-ui
