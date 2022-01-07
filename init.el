@@ -7,7 +7,10 @@
  '(package-selected-packages
    '(license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
  '(safe-local-variable-values
-   '((projectile-project-configure-cmd . "cmake -S . -B build -D CMAKE_EXPORT_COMPILE_COMMANDS=ON")
+   '((projectile-project-compilation-cmd . "cmake --build ~/C++/elr1/build")
+     (projectile-project-configure-cmd . "cmake -S ~/C++/elr1 -B ~/C++/elr1/build -D CMAKE_BUILD_TYPE=Debug")
+     (projectile-project-compilation-cmd . "cmake --build ~/C++/cmake-train/build")
+     (projectile-project-configure-cmd . "cmake -S ~/C++/cmake-train -B ~/C++/cmake-train/build -D CMAKE_BUILD_TYPE=Debug")
      (projectile-project-configure-cmd . "cmake -B build -D CMAKE_EXPORT_COMPILE_COMMANDS=ON")
      (projectile-project-configure-cmd . "cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"))))
 (custom-set-faces
@@ -61,6 +64,13 @@
 (global-set-key (kbd "C-M-SPC") #'which-key-show-major-mode)
 (require 'ivy-hydra)
 (global-set-key (kbd "M-=") 'transient-dwim-dispatch)
+
+;;----------------
+;; Bison
+;;----------------
+(add-to-list 'auto-mode-alist '("\\.yy\\'" . bison-mode))
+(add-to-list 'auto-mode-alist '("\\.ll\\'" . flex-mode))
+(add-to-list 'auto-mode-alist '("\\.lex\\'" . flex-mode))
 
 ;;------------
 ;; Ivy
