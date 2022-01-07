@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files '("~/agenda.org"))
  '(package-selected-packages
-   '(eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
+   '(license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
  '(safe-local-variable-values
    '((projectile-project-configure-cmd . "cmake -S . -B build -D CMAKE_EXPORT_COMPILE_COMMANDS=ON")
      (projectile-project-configure-cmd . "cmake -B build -D CMAKE_EXPORT_COMPILE_COMMANDS=ON")
@@ -32,7 +32,6 @@
 ;; Various
 ;;-------------
 (define-key prog-mode-map (kbd "C-c C-c") 'comment-or-uncomment-region)
-(which-key-mode)
 (global-flycheck-mode)
 (add-hook 'cmake-mode-hook 'eldoc-cmake-enable)
 
@@ -53,6 +52,15 @@
       company-idle-delay 0.5
       company-minimum-prefix-length 2
       lsp-idle-delay 0.5)  ;; clangd is fast
+
+;;--------------
+;; Help - transient-dwim
+;;--------------
+(which-key-mode 1)
+;;(global-set-key (kbd "M-SPC") #'major-mode-hydra)
+(global-set-key (kbd "C-M-SPC") #'which-key-show-major-mode)
+(require 'ivy-hydra)
+(global-set-key (kbd "M-=") 'transient-dwim-dispatch)
 
 ;;------------
 ;; Ivy
