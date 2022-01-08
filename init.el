@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files '("~/agenda.org"))
  '(package-selected-packages
-   '(license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
+   '(ggtags license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
  '(safe-local-variable-values
    '((projectile-project-compilation-cmd . "cmake --build ~/C++/elr1/build")
      (projectile-project-configure-cmd . "cmake -S ~/C++/elr1 -B ~/C++/elr1/build -D CMAKE_BUILD_TYPE=Debug")
@@ -99,6 +99,29 @@ This could be useful to use the advanced commands"
 ;;--------------
 ;;(eval-after-load 'magit
 ;;  (setq magit-view-git-manual-method 'woman))
+
+;;----------------
+;; Projectile
+;;-------------
+
+;;---------------
+;;Ggtags
+;;--------------
+(defun my/ggtags-activate ()
+  "Activate ggtags.
+
+If there exist a corresponding GTAGS file, activate `ggtags-mode'. Otherwise, stick to nothing (or, usually, xref)"
+  (progn
+    (if (ggtags-find-project)
+	(ggtags-mode)
+      nil)
+    )
+  )
+
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+              (my/ggtags-activate))))
 
 ;;-----------------
 ;; AucTeX
