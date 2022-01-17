@@ -349,6 +349,8 @@ Uses the simple Java Run Configuration"
 ;;(add-hook 'java-mode-hook 'eglot-ensure)
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
+(remove-hook 'bison-mode-hook 'lsp)
+(remove-hook 'flex-mode-hook 'lsp)
 
 ;;---------------
 ;; lsp-ui
