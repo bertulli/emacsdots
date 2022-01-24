@@ -107,6 +107,7 @@ This could be useful to use the advanced commands"
 ;;---------------
 ;;Ggtags
 ;;--------------
+(require 'ggtags)
 (defun my/ggtags-activate ()
   "Activate ggtags.
 
@@ -117,6 +118,8 @@ If there exist a corresponding GTAGS file, activate `ggtags-mode'. Otherwise, st
       nil)
     )
   )
+
+(define-key ggtags-mode-map (kbd "C-c M-g") nil)
 
 (add-hook 'c-mode-common-hook
           (lambda ()
