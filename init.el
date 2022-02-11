@@ -152,8 +152,17 @@ If there exist a corresponding GTAGS file, activate `ggtags-mode'. Otherwise, st
 ;;--------------
 ;; Org
 ;;------------
+(require 'org)
 (add-hook 'org-mode-hook 'visual-line-mode)
 (setf org-highlight-links '(bracket plain radio tag date footnote))
+
+;;timer
+(setq org-clock-sound "/home/alessandro/.emacs.d/AC_Bicycle-bell-1.au")
+;; taken from https://commons.wikimedia.org/wiki/File:Bicycle-bell-1.wav
+;; and converted using an online converter
+(global-set-key (kbd "C-c C-x ;") #'org-timer-set-timer)
+(global-set-key (kbd "C-c C-x ,") #'org-timer-pause-or-continue)
+(global-set-key (kbd "C-c C-x _") #'org-timer-stop)
 ;; these keybindings are suggested by the org guide
 ;;(global-set-key (kbd "C-c l") #'org-store-link) ;; it conflicts with lsp-mode
 (global-set-key (kbd "C-c a") #'org-agenda)
