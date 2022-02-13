@@ -34,6 +34,7 @@
 ;;------------
 ;; Various
 ;;-------------
+(setq confirm-kill-emacs #'y-or-n-p)
 (define-key prog-mode-map (kbd "C-c C-c") 'comment-or-uncomment-region)
 (global-flycheck-mode)
 (add-hook 'cmake-mode-hook 'eldoc-cmake-enable)
