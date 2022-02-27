@@ -18,8 +18,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-link ((t (:inherit link :underline nil))))
- '(org-target ((t (:underline nil)))))
+ ;;'(org-link ((t (:inherit link :underline nil))))
+ ;;'(org-target ((t (:underline nil))))
+ )
 ;;--------------
 ;; Enable MELPA
 ;;-------------
@@ -156,6 +157,52 @@ If there exist a corresponding GTAGS file, activate `ggtags-mode'. Otherwise, st
 (require 'org)
 (add-hook 'org-mode-hook 'visual-line-mode)
 (setf org-highlight-links '(bracket plain radio tag date footnote))
+
+(defun electric-insert-left-angle-bracket ()
+  "Insert a left angle bracket ('<') and, if doubles, convert it to an open guillemet ('«')."
+  (interactive)
+  (if (equal (char-before (point)) #x3c);;code for <
+      (progn
+	(delete-char -1) ;;TODO see doc
+	(insert-char #x00ab 1 t)) ;;code for «
+    (insert-char #x3c 1 t))
+  )
+
+(defun electric-insert-right-angle-bracket ()
+  "Insert a right angle bracket ('>') and, if double, convert it to a close guillemet ('»')."
+  (interactive)
+  (if (equal (char-before (point)) #x3e);;code for >
+      (progn
+	(delete-char -1) ;;TODO see doc
+	(insert-char #x00bb 1 t)) ;;code for »
+    (insert-char #x3e 1 t))
+  )
+
+(defun quoted-insert-left-angle-bracket ()
+  "Insert the quoted char '<'."
+  (interactive)
+  (progn (insert-char #x3c 1 t)))
+
+(defun quoted-insert-right-angle-bracket ()
+  "Insert the quoted char '>'."
+  (interactive)
+  (progn (insert-char #x3e 1 t)))
+
+(define-minor-mode narrative-mode
+  "A minor mode that overrides the angle brackets insertion, changing them to guillemets.
+
+Binds '<' and '>' to specific functions, which converts \"<<\" to '«' and \">>\" to '»'. Normal angle brackets can be inserted with C-< and C->."
+  :lighter " narr"
+  :keymap `(((kbd "<") . electric-insert-left-angle-bracket)
+	    ((kbd ">") . electric-insert-right-angle-bracket)
+	    (,(kbd "C-<") . quoted-insert-left-angle-bracket)
+	    (,(kbd "C->") . quoted-insert-right-angle-bracket)
+	    )
+  )
+
+;;normally, C-< and C-> insert guillemets
+(global-set-key (kbd "C-<") #'electric-insert-left-angle-bracket)
+(global-set-key (kbd "C->") #'electric-insert-right-angle-bracket)
 
 ;;timer
 (setq org-clock-sound "/home/alessandro/.emacs.d/AC_Bicycle-bell-1.au")
