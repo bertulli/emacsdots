@@ -121,28 +121,33 @@ This could be useful to use the advanced commands"
 ;;----------------
 ;; Projectile
 ;;-------------
-
+(require 'projectile)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(projectile-mode +1)
 ;;---------------
 ;;Ggtags
 ;;--------------
-(require 'ggtags)
-(defun my/ggtags-activate ()
-  "Activate ggtags.
+;; (require 'ggtags)
+;; (defun my/ggtags-activate ()
+;;   "Activate ggtags.
 
-If there exist a corresponding GTAGS file, activate `ggtags-mode'. Otherwise, stick to nothing (or, usually, xref)"
-  (progn
-    (if (ggtags-find-project)
-	(ggtags-mode)
-      nil)
-    )
-  )
+;; If there exist a corresponding GTAGS file, activate `ggtags-mode'. Otherwise, stick to nothing (or, usually, xref)"
+;;   (progn
+;;     (if (ggtags-find-project)
+;; 	(ggtags-mode)
+;;       nil)
+;;     )
+;;   )
 
-(define-key ggtags-mode-map (kbd "C-c M-g") nil)
+;; (define-key ggtags-mode-map (kbd "C-c M-g") nil)
+;; (define-key ggtags-navigation-map (kbd "M-o") #'ace-window)
 
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-              (my/ggtags-activate))))
+;; (add-hook 'c-mode-common-hook
+;;           (lambda ()
+;;             (when (derived-mode-p 'c-mode
+;; 				  ;;'c++-mode ;;as the xref/lsp one is better
+;; 				  'java-mode)
+;;               (my/ggtags-activate))))
 
 ;;-----------------
 ;; AucTeX
@@ -238,12 +243,6 @@ Binds '<' and '>' to specific functions, which converts \"<<\" to '«' and \">>\
 (yas-reload-all)
 (yas-global-mode)
 
-;;--------------
-;;Projectile
-;;-------------------
-(require 'projectile)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(projectile-mode +1)
 ;;----------------------
 ;; Maven
 ;;-------------------
