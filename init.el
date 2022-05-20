@@ -19,7 +19,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files '("~/agenda.org"))
+ '(org-agenda-files
+   '("/home/alessandro/prov.org" "/home/alessandro/middleware/middleware_projectA/MPI_simulator/MPI-proj.org" "/home/alessandro/tesi/thesis-proj-roadmap.org" "/home/alessandro/agenda.org"))
+ '(org-use-sub-superscripts '{})
  '(package-selected-packages
    '(corfu-doc corfu orderless vertico org ivy-bibtex company-reftex org-ref citar ebib systemd helpful cdlatex command-log-mode gh-md meghanada flycheck-plantuml plantuml-mode cider flycheck-lilypond license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
  '(safe-local-variable-values
@@ -34,8 +36,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- ;;'(org-link ((t (:inherit link :underline nil))))
- ;;'(org-target ((t (:underline nil))))
  )
 ;;--------------
 ;; Enable MELPA
@@ -232,7 +232,33 @@ This could be useful to use the advanced commands"
 ;;------------
 (require 'org)
 (add-hook 'org-mode-hook 'visual-line-mode)
+(add-hook 'org-mode-hook 'abbrev-mode)
 (setf org-highlight-links '(bracket plain radio tag date footnote))
+
+(require 'org-capture)
+(setq org-capture-templates
+ '(("c" "Comment" entry (file+headline "~/.notes" "Comments")
+    "** Comment %t\n From: %a\n \"%i\"\n\n %?\n\n")
+   ("f" "Fantasy Chronicles" entry (file+headline "~/FantasyChronicles/notes.org" "Note rapide")
+    "** Capture %t\n  Da: %a\n  \"%i\"\n\n  %?\n\n")
+   ("n" "Note" entry (file+headline "~/.notes" "Notes")
+    "** Note %t\n  %?\n\n")
+   ("N" "Titled note" entry (file+headline "~/.notes" "Notes")
+    "** %? %t\n  \n")
+   ("l" "LLVM journal" entry
+    (file+datetree "~/tesi/llvm_journal.org")
+    "* %<%H:%M> %?\n\n" :empty-lines 1)
+   ("m" "Middleware journal" entry
+    (file+datetree "~/middleware/middleware_projectA/mid_journal.org")
+    "* %<%H:%M> %?\n\n" :empty-lines 1)
+   ("t" "Task" entry (file+headline "~/.notes" "Tasks")
+    "* TODO %?\n  %i\n  %a")
+   ("a" "Agenda task" entry (file+headline "~/agenda.org" "Agenda tasks")
+    "* TODO %?\n  %i\n  %a")))
+
+(define-key org-mode-map (kbd "C-M-e") 'org-emphasize)
+(setq org-use-sub-superscripts '{})
+(setq org-export-with-sub-superscripts '{})
 
 (defun electric-insert-left-angle-bracket ()
   "Insert a left angle bracket ('<') and, if doubles, convert it to an open guillemet ('«')."
@@ -282,6 +308,7 @@ Binds '<' and '>' to specific functions, which converts \"<<\" to '«' and \">>\
 
 ;;timer
 (setq org-clock-sound "/home/alessandro/.emacs.d/AC_Bicycle-bell-1.au")
+;;(setq org-clock-sound "~/.emacs.d/modded.wav")
 ;; taken from https://commons.wikimedia.org/wiki/File:Bicycle-bell-1.wav
 ;; and converted using an online converter
 (global-set-key (kbd "C-c C-x ;") #'org-timer-set-timer)
