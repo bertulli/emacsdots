@@ -136,6 +136,10 @@
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (setq ivy-count-format "(%d/%d) ")
+;;---------------
+;; CIDER
+;;---------------
+(add-hook 'clojure-mode-hook #'cider-mode)
 
 ;;----------------
 ;; PlantUML
@@ -225,8 +229,8 @@ This could be useful to use the advanced commands"
 ;;-----------------
 ;; Muse
 ;;--------------
-(add-hook 'muse-mode-hook 'toggle-word-wrap)
-
+;;(add-hook 'muse-mode-hook 'toggle-word-wrap)
+(add-hook 'muse-mode-hook 'visual-line-mode)
 ;;--------------
 ;; Org
 ;;------------
