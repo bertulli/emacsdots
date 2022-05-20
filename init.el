@@ -137,6 +137,21 @@
 (setq ivy-use-virtual-buffers t)
 (setq ivy-count-format "(%d/%d) ")
 
+;;----------------
+;; PlantUML
+;;----------------
+;; (defun get-string-from-file (filePath)
+;;   "Return file FILEPATH, putting content in a string."
+;;   (with-temp-buffer
+;;     (insert-file-contents filePath)
+;;     (buffer-string)))
+;; from http://xahlee.info/emacs/emacs/elisp_read_file_content.html
+;; thanks to “Pascal J Bourguignon” and “TheFlyingDutchman [zzbba…@aol.com]”. 2010-09-02
+
+(require 'plantuml-mode)
+(require 'flycheck-plantuml)
+(add-to-list 'auto-mode-alist '("\\.uml\\'" . plantuml-mode))
+
 ;;--------------
 ;; Ace-window
 ;;-------------
