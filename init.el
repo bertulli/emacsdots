@@ -109,8 +109,26 @@
 ;; Bison
 ;;----------------
 (add-to-list 'auto-mode-alist '("\\.yy\\'" . bison-mode))
-(add-to-list 'auto-mode-alist '("\\.ll\\'" . flex-mode))
+;;(add-to-list 'auto-mode-alist '("\\.ll\\'" . flex-mode))
 (add-to-list 'auto-mode-alist '("\\.lex\\'" . flex-mode))
+
+;;-----------
+;; LLVM
+;;----------
+;;taken inspiration from https://emacs.stackexchange.com/questions/34698/loading-and-executing-el-file-if-it-exists-on-startup
+(let* ((emacs-llvm-dir "~/.emacs.d/llvm/")
+      (emacs-llvm-file (concat emacs-llvm-dir "emacs.el")))
+  (setq load-path
+	(cons (expand-file-name emacs-llvm-dir) load-path))
+  (require 'llvm-mode)
+  (require 'tablegen-mode)
+  
+  (if (file-exists-p emacs-llvm-file)
+      (load-file emacs-llvm-file)
+    ;;  (error "ERROR: couldn't find `%s'" emacs-llvm-file)
+    ;;(signal 'file-missing emacs-llvm-file)
+    )
+  )
 
 ;;------------
 ;; Ivy
