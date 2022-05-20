@@ -226,6 +226,28 @@ This could be useful to use the advanced commands"
     '(eglot-java-init)))
 (require 'cc-mode)
 (define-key java-mode-map (kbd "C-c j r") 'eglot-java-run-main)
+
+;; Reftex -------------
+
+(require 'reftex)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
+(add-hook 'latex-mode-hook 'turn-on-reftex)   ; with Emacs latex mode
+
+(define-key reftex-mode-map (kbd "M-.") #'reftex-view-crossref)
+(setq reftex-plug-into-AUCTeX t)
+(setq reftex-idle-time 1.0)
+;;taken from https://tex.stackexchange.com/questions/54739/reftex-wont-find-my-bib-file-in-local-library-tree
+;; So that RefTeX finds my bibliography
+(setq reftex-default-bibliography '("~/Library/Library.bib"))
+;; So that RefTeX also recognizes \addbibresource. Note that you
+;; can't use $HOME in path for \addbibresource but that "~"
+;; works.
+(setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+
+;; ;; Company-reftex
+;; (push 'company-reftex-citations company-backends)
+;; (push 'company-reftex-labels company-backends)
+;; (add-hook 'reftex-mode-hook #'company-mode)
 ;;-----------------
 ;; Muse
 ;;--------------
@@ -322,6 +344,49 @@ Binds '<' and '>' to specific functions, which converts \"<<\" to '«' and \">>\
 ;;(global-set-key (kbd "C-c l") #'org-store-link) ;; it conflicts with lsp-mode
 (global-set-key (kbd "C-c a") #'org-agenda)
 (global-set-key (kbd "C-c c") #'org-capture)
+
+;; Citar ----------------
+(require 'citar)
+;; (require 'oc-citar)
+(require 'ivy-bibtex)
+(autoload 'ivy-bibtex "ivy-bibtex" "" t)
+(setq bibtex-completion-bibliography
+      '("~/Library/Library.bib"))
+(setq ivy-re-builders-alist
+      '((ivy-bibtex . ivy--regex-ignore-order)
+        (t . ivy--regex-plus)))
+;; (defun ivy-bibtex-my-publications (&optional arg)
+;;   "Search BibTeX entries authored by “Jane Doe”.
+
+;; With a prefix ARG, the cache is invalidated and the bibliography reread."
+;;   (interactive "P")
+;;   (when arg
+;;     (bibtex-completion-clear-cache))
+;;   (bibtex-completion-init)
+;;   (ivy-read "BibTeX Items: "
+;;             (bibtex-completion-candidates)
+;;             :initial-input "acm"
+;;             :caller 'ivy-bibtex
+;;             :action ivy-bibtex-default-action))
+
+;; ;; Bind this search function to Ctrl-x p:
+;; (global-set-key (kbd "C-x p") 'ivy-bibtex-my-publications)
+(require 'oc-biblatex)
+(require 'oc-natbib)
+(require 'ox-latex)
+;; (setq org-latex-pdf-process '(
+;; (setq org-latex-pdf-process '("pdflatex -output-directory %o %f"
+;;                               "bibtex %b"
+;;                               "pdflatex -output-directory %o %f"
+;;                               "pdflatex -output-directory %o %f"))
+(setq org-cite-global-bibliography '("~/Library/Library.bib"))
+(setq org-cite-insert-processor 'citar
+      org-cite-follow-processor 'citar
+      org-cite-activate-processor 'citar
+      citar-bibliography org-cite-global-bibliography)
+(define-key org-mode-map (kbd "C-c b") #'org-cite-insert)
+(define-key minibuffer-local-map (kbd "M-b") #'citar-insert-preset)
+
 ;;-----------------
 ;; YASnippet
 ;;-----------------
