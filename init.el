@@ -51,14 +51,30 @@
 ;;------------
 ;; Various
 ;;-------------
+(global-set-key (kbd "C-x C-c") #'save-buffers-kill-emacs)
 (setq confirm-kill-emacs #'y-or-n-p)
+(tool-bar-mode 0)
 (define-key prog-mode-map (kbd "C-c C-c") 'comment-or-uncomment-region)
 (global-flycheck-mode)
 (add-hook 'cmake-mode-hook 'eldoc-cmake-enable)
+(add-hook 'markdown-mode-hook 'visual-line-mode)
+
+;;for artist mode
+(add-hook 'artist-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 (setq sentence-end-double-space nil)
 (show-paren-mode)
 
+;;indentation
+(defun indent-buffer ()
+  "Indent all the current buffer, using built-in `indent-region'."
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
+(global-set-key (kbd "C-M-|") 'indent-buffer)
+
+;; Lilypond
+(load-library "lilypond-mode")
 
 (defun my/ide-setup ()
   "Set up an environment like an IDE."
