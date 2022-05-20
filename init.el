@@ -21,7 +21,7 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files '("~/agenda.org"))
  '(package-selected-packages
-   '(ggtags license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
+   '(corfu-doc corfu orderless vertico org ivy-bibtex company-reftex org-ref citar ebib systemd helpful cdlatex command-log-mode gh-md meghanada flycheck-plantuml plantuml-mode cider flycheck-lilypond license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
  '(safe-local-variable-values
    '((projectile-project-compilation-cmd . "cmake --build ~/C++/elr1/build")
      (projectile-project-configure-cmd . "cmake -S ~/C++/elr1 -B ~/C++/elr1/build -D CMAKE_BUILD_TYPE=Debug")
@@ -82,6 +82,12 @@
 (global-set-key (kbd "C-M-SPC") #'which-key-show-major-mode)
 (require 'ivy-hydra)
 (global-set-key (kbd "M-=") 'transient-dwim-dispatch)
+
+;; Helpful ---------------
+(global-set-key (kbd "C-h f") #'helpful-callable)
+(global-set-key (kbd "C-h v") #'helpful-variable)
+(global-set-key (kbd "C-h k") #'helpful-key)
+(global-set-key (kbd "C-h M-.") #'helpful-at-point)
 
 ;;----------------
 ;; Bison
