@@ -1,6 +1,7 @@
 
 ;;; Code:
 (require 'projectile)
+(require 'eshell)
 (require 'lsp-java)
 
 (defun get-main-method-list ()
@@ -34,41 +35,39 @@
   "Launch a separate (?) Java process running the main method of class MAINCLASS."
   (interactive
    (list (completing-read "Run main method: " (get-main-method-list))))
-  (let ((terminal-buffer (format "*java<%s>*" mainClass))
-	(project-root (projectile-acquire-root)))
+  (let ((project-root (projectile-acquire-root)))
     (shell-command (format "mvn -f %s compile" project-root))
-    (apply 'make-comint-in-buffer mainClass
-	   terminal-buffer
-	   lsp-java-java-path
-	   nil
-	   (list
-	    "-Dfile.encoding=UTF-8"
-	    "-classpath"
-	    (progn
-	      (eshell-command (format "mvn -f %s dependency:build-classpath -Dmdep.includeScope=runtime > (get-buffer-create \"*mvn-classpath*\")" project-root))
-	      (let ((basic-classpath (with-current-buffer "*mvn-classpath*"
-				       (goto-char (point-min))
-				       (delete-matching-lines "\\[INFO\\]\\|\\[WARNING\\]")
-				       (buffer-substring-no-properties (point-min) (- (point-max) 1)) ;; ignore ending newline
-				       )))
-		(concat (projectile-acquire-root) "target/classes:" basic-classpath)))
-	    mainClass))
-    (pop-to-buffer-same-window terminal-buffer)))
+    (cl-assert eshell-buffer-name)
+    (let ((buf (generate-new-buffer (format "%s<%s>"
+					    eshell-buffer-name
+					    mainClass))))
+      (cl-assert (and buf (buffer-live-p buf)))
+      (pop-to-buffer-same-window buf)
+      (unless (derived-mode-p 'eshell-mode)
+	(eshell-mode))
+      (eshell-return-to-prompt)
+      (insert (format "%s -Dfile.encoding=UTF-8 -classpath %s %s"
+		      lsp-java-java-path
+		      (progn
+			(eshell-command (format "mvn -f %s dependency:build-classpath -Dmdep.includeScope=runtime > (get-buffer-create \"*mvn-classpath*\")" project-root))
+			(let ((basic-classpath (with-current-buffer "*mvn-classpath*"
+						 (goto-char (point-min))
+						 (delete-matching-lines "\\[INFO\\]\\|\\[WARNING\\]")
+						 (buffer-substring-no-properties (point-min) (- (point-max) 1)) ;; ignore ending newline
+						 )))
+			  (concat (projectile-acquire-root) "target/classes:" basic-classpath)))
+		      mainClass))
+      ;;(insert "\n---------------------\n") causes the line to be read
+      (eshell-send-input)
+      buf)
+    ))
+;;  (pop-to-buffer-same-window terminal-buffer)))
 
 
 ;; (make-comint-in-buffer "procProva" "*bufferProva*"
 ;; 		       "ls" nil "-l")
 
-;; (cl-assert eshell-buffer-name)
-;; (let ((buf (generate-new-buffer (format "%s<%s>"
-;; 					eshell-buffer-name
-;; 					name))))
 
-;;   (cl-assert (and buf (buffer-live-p buf)))
-;;   (pop-to-buffer-same-window buf)
-;;   (unless (derived-mode-p 'eshell-mode)
-;;     (eshell-mode))
-;;   buf)
 (global-set-key (kbd "C-c j") #'run-java-main-method)
 
 
