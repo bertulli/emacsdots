@@ -41,6 +41,13 @@
 ;; Enable MELPA
 ;;-------------
 
+;; RealGUD ------------------------
+;; (require 'realgud)
+;; (global-set-key (kbd "C-c p x d")
+;; 		(lambda () (interactive)
+;; 		  (projectile-with-default-dir (projectile-acquire-root)
+;; 		    (realgud:gdb))))
+
 ;; Windows --------------------
 (require 'windsize)
 ;;(windsize-default-keybindings)
