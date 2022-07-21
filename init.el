@@ -41,6 +41,23 @@
 ;; Enable MELPA
 ;;-------------
 
+;; Windows --------------------
+(require 'windsize)
+;;(windsize-default-keybindings)
+(global-set-key (kbd "M-S-<left>") #'windsize-left)
+(global-set-key (kbd "M-S-<right>") #'windsize-right)
+(global-set-key (kbd "M-S-<up>") #'windsize-up)
+(global-set-key (kbd "M-S-<down>") #'windsize-down)
+
+(setq windsize-cols 1)
+(setq windsize-rows 1)
+
+(require 'window-jump)
+(global-set-key (kbd "M-<left>") #'window-jump-left)
+(global-set-key (kbd "M-<right>") #'window-jump-right)
+(global-set-key (kbd "M-<up>") #'window-jump-up)
+(global-set-key (kbd "M-<down>") #'window-jump-down)
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
