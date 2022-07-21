@@ -263,6 +263,12 @@ With two universal arguments call `my/eshell'."
 (require 'savehist)
 (savehist-mode)
 
+;; Orderless----------
+(setq completion-styles '(basic substring orderless partial-completion emacs22))
+(setq read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-ignore-case t)
+
 ;;---------------
 ;; CIDER
 ;;---------------
