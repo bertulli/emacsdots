@@ -23,7 +23,7 @@
    '("/home/alessandro/prov.org" "/home/alessandro/middleware/middleware_projectA/MPI_simulator/MPI-proj.org" "/home/alessandro/tesi/thesis-proj-roadmap.org" "/home/alessandro/agenda.org"))
  '(org-use-sub-superscripts '{})
  '(package-selected-packages
-   '(corfu-doc corfu orderless vertico org ivy-bibtex company-reftex org-ref citar ebib systemd helpful cdlatex command-log-mode gh-md meghanada flycheck-plantuml plantuml-mode cider flycheck-lilypond license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
+   '(rustic consult citar gnu-elpa-keyring-update flycheck-rust rust-mode bug-hunter interaction-log vterm pdf-tools org-roam tree-sitter-langs tree-sitter window-jump windsize org-sticky-header realgud quickrun olivetti corfu-doc corfu orderless vertico org ivy-bibtex company-reftex ebib systemd helpful cdlatex command-log-mode gh-md meghanada flycheck-plantuml plantuml-mode cider flycheck-lilypond license-snippets lice bison-mode hercules major-mode-hydra ivy-hydra transient-dwim eldoc-cmake ivy auctex eglot-java projectile java-snippets eglot javadoc-lookup maven-test-mode mvn cmake-mode magit lsp-ui groovy-mode gradle-mode flycheck which-key lsp-java muse yasnippet-snippets yasnippet company-irony-c-headers lsp-mode company-irony irony company))
  '(safe-local-variable-values
    '((projectile-project-compilation-cmd . "cmake --build ~/C++/elr1/build")
      (projectile-project-configure-cmd . "cmake -S ~/C++/elr1 -B ~/C++/elr1/build -D CMAKE_BUILD_TYPE=Debug")
@@ -58,6 +58,13 @@
 (global-set-key (kbd "M-<up>") #'window-jump-up)
 (global-set-key (kbd "M-<down>") #'window-jump-down)
 
+
+;; Avy ------------
+(require 'avy)
+(avy-setup-default)
+(global-set-key (kbd "M-SPC") 'avy-goto-char-timer)
+(setq avy-style 'pre)
+(setq avy-all-windows nil) ; or t or 'all-frames
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
