@@ -159,6 +159,10 @@ With two universal arguments call `my/eshell'."
     (indent-region (point-min) (point-max) nil)))
 (global-set-key (kbd "C-M-|") 'indent-buffer)
 
+;; Lice
+(require 'lice)
+(setq lice:comment-style 'box)
+
 ;; Lilypond
 (load-library "lilypond-mode")
 
@@ -477,8 +481,11 @@ Binds '<' and '>' to specific functions, which converts \"<<\" to '«' and \">>\
 ;; YASnippet
 ;;-----------------
 (require 'yasnippet)
+(require 'license-snippets)
 (yas-reload-all)
 (yas-global-mode)
+(license-snippets-init)
+
 
 ;;----------------------
 ;; Maven
