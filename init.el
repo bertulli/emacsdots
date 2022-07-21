@@ -223,9 +223,46 @@ With two universal arguments call `my/eshell'."
 ;;------------
 ;; Ivy
 ;;----------
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
+;; (ivy-mode 1)
+;; (setq ivy-use-virtual-buffers t)
+;; (setq ivy-count-format "(%d/%d) ")
+
+;;------------------
+;; Vertico
+;;----------------
+(require 'vertico)
+(vertico-mode)
+
+;; from https://github.com/minad/vertico
+;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+;; Vertico commands are hidden in normal buffers.
+(setq read-extended-command-predicate
+      #'command-completion-default-include-p)
+;; Enable recursive minibuffers
+(setq enable-recursive-minibuffers t)
+(defun crm-indicator (args)
+  "Taken from the vertico repo"
+  (cons (format "[CRM%s] %s"
+                (replace-regexp-in-string
+                 "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                 crm-separator)
+                (car args))
+        (cdr args)))
+(advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+(setq minibuffer-prompt-properties
+      '(read-only t cursor-intangible t face minibuffer-prompt))
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+(define-key vertico-map (kbd "TAB") #'minibuffer-complete)
+;; (define-key vertico-map (kbd "RET") #'vertico-exit)
+(define-key vertico-map (kbd "C-<tab>") #'vertico-insert)
+(define-key minibuffer-mode-map (kbd "C-<tab>") #'vertico-insert)
+(define-key minibuffer-local-map (kbd "C-<tab>") #'vertico-insert)
+(define-key vertico-map (kbd "<backspace>") #'vertico-directory-delete-char)
+(define-key vertico-map (kbd "C-<backspace>") #'delete-backward-char)
+(require 'savehist)
+(savehist-mode)
+
 ;;---------------
 ;; CIDER
 ;;---------------
