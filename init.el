@@ -85,6 +85,53 @@
 
 (setq tab-always-indent 'complete)
 
+;; Eshell
+
+(require 'eshell)
+(defun my/eshell (name)
+  "Create a new eshell buffer, appending NAME to it."
+
+  ;; B
+  ;; A buffer name. The buffer need not exist. By default, uses the name of a recently used buffer other than the current buffer. Completion, Default, Prompt.
+
+  ;; M
+  ;; Arbitrary text, read in the minibuffer using the current buffer’s input method, and returned as a string (see Input Methods in The GNU Emacs Manual). Prompt.
+
+  ;; s
+  ;; Arbitrary text, read in the minibuffer and returned as a string (see Text from Minibuffer). Terminate the input with either C-j or RET. (C-q may be used to include either of these characters in the input.) Prompt.
+
+  ;; S
+  ;; An interned symbol whose name is read in the minibuffer. Terminate the input with either C-j or RET. Other characters that normally terminate a symbol (e.g., whitespace, parentheses and brackets) do not do so here. Prompt.
+
+  (interactive "MName of the eshell session: ")
+  (cl-assert eshell-buffer-name)
+  (let ((buf (generate-new-buffer (format "%s<%s>"
+					  eshell-buffer-name
+					  name))))
+    
+    (cl-assert (and buf (buffer-live-p buf)))
+    (pop-to-buffer-same-window buf)
+    (unless (derived-mode-p 'eshell-mode)
+      (eshell-mode))
+    buf))
+
+(defun my/eshell-wrap (arg)
+  "Wrapper to call eshell. ARG is taken as universal argument.
+
+With zero or one universal arguments simply calls eshell with it.
+With two universal arguments call `my/eshell'."
+  (interactive "P")
+  (if
+      (equal (prefix-numeric-value arg) 16)
+      (call-interactively #'my/eshell)
+    (call-interactively 'eshell)
+    ))
+
+(global-set-key (kbd "C-c e") #'my/eshell-wrap)
+(global-set-key (kbd "C-c t") #'(lambda () (interactive) (term "/bin/bash")))
+(global-set-key (kbd "C-c s") #'shell)
+(global-set-key (kbd "C-c v") #'vterm)
+
 ;;for artist mode
 (add-hook 'artist-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
