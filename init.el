@@ -269,6 +269,92 @@ With two universal arguments call `my/eshell'."
       read-buffer-completion-ignore-case t
       completion-ignore-case t)
 
+;;--------------
+;; Corfu
+;;---------------
+(require 'corfu)
+(global-corfu-mode 1)
+
+(require 'lsp-mode)
+;;for LSP
+(setq lsp-completion-provider :none)
+;; (defun corfu-lsp-setup ()
+;;   "Set up Corfu for LSP.
+
+;; Taken from https://www.reddit.com/r/emacs/comments/ql8cyp/comment/hj2k2lh/?utm_source=share&utm_medium=web2x&context=3"
+;;   (setq-local ;;completion-styles '(orderless)
+;; 	      completion-category-defaults nil))
+;; (add-hook 'lsp-mode-hook #'corfu-lsp-setup)
+;; ;;not sure
+;; (add-hook 'eglot-connect-hook #'corfu-lsp-setup)
+
+;;from https://github.com/minad/corfu/wiki
+;; Option 1: Specify explicitly to use Orderless for Eglot
+(setq completion-category-overrides '((eglot (styles orderless))))
+
+;; Option 2: Undo the Eglot modification of completion-category-defaults
+(with-eval-after-load 'eglot
+  (setq completion-category-defaults nil))
+(defun lsp-mode-setup-corfu-completion ()
+  "Set up lsp-mode to work with Corfu.
+
+This should be called in the hook for lsp-mode (tipically `lsp-completion-mode-hook'.
+Taken from https://github.com/minad/corfu/wiki ."
+  (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+	'(orderless)))
+(add-hook 'lsp-completion-mode-hook #'lsp-mode-setup-corfu-completion)
+
+(setq corfu-auto-prefix 1)
+(setq corfu-auto-delay 0.5)
+;; Enable auto completion and configure quitting
+(setq corfu-auto t
+      corfu-quit-no-match 'separator) ;; or t
+
+;; my version
+;; (defun corfu-custom-complete ()
+;;   "Complete common part of candidates, without exiting completion."
+;;   (interactive)
+;;   (let* (
+;; 	 (current-symbol (thing-at-point 'symbol :no-properties))
+;; 	 (bounds (bounds-of-thing-at-point 'symbol))
+;; 	 (start (car bounds))
+;; 	 (end (cdr bounds))
+;; 	 (common-part (try-completion current-symbol corfu--candidates)))
+;;     (if (and (not (cdr corfu--candidates))
+;;              (equal common-part (car corfu--candidates)))
+;;         (corfu-insert)
+;;       (progn
+;;       (delete-region start end)
+;;       (insert common-part)))))
+
+;; (define-key corfu-map (kbd "TAB") #'corfu-custom-complete)
+;; (define-key corfu-map (kbd "<tab>") #'corfu-custom-complete)
+
+;; suggested on GH
+(defun corfu-complete-common-or-next ()
+  "Complete common prefix or go to next candidate."
+  (interactive)
+  (if (= corfu--total 1)
+      (progn
+        (corfu--goto 1)
+        (corfu-insert))
+    (let* ((str (car corfu--input))
+           (pt (cdr corfu--input))
+           (common (try-completion str corfu--candidates)))
+      (if (and (stringp common)
+               (not (string= str common)))
+          (insert (substring common pt))
+	;; uncomment this line if you want <tab> to cycle between completion candidates
+        ;; (corfu-next)
+	))))
+(put 'corfu-complete-common-or-next 'completion-predicate #'ignore)
+(define-key corfu-map (kbd "<tab>") #'corfu-complete-common-or-next)
+;; Corfu-doc --------------
+;; (require 'corfu-doc)
+;; (add-hook 'corfu-mode-hook #'corfu-doc-mode)
+;; (define-key corfu-map (kbd "M-d") #'corfu-doc-toggle)
+;; (define-key corfu-map (kbd "M-p") #'corfu-doc-scroll-up)
+;; (define-key corfu-map (kbd "M-n") #'corfu-doc-scroll-down)
 ;;---------------
 ;; CIDER
 ;;---------------
@@ -725,12 +811,12 @@ Uses the simple Java Run Configuration"
 ;;-------------------
 ;; Company (should be called after lsp-mode?)
 ;;------------------
-(add-hook 'prog-mode-hook 'company-mode)
-(define-key prog-mode-map (kbd "C-M-i") 'company-complete)
-(eval-after-load 'comapny '(define-key company-mode-map (kbd "<C-tab>") 'company-complete))
-(eval-after-load 'company '(define-key company-active-map (kbd "<tab>") 'company-complete))
-(eval-after-load 'company '(add-to-list 'company-backends 'company-capf))
-(setq company-minimum-prefix-length 1)
+;; (add-hook 'prog-mode-hook 'company-mode)
+;; (define-key prog-mode-map (kbd "C-M-i") 'company-complete)
+;; (eval-after-load 'comapny '(define-key company-mode-map (kbd "<C-tab>") 'company-complete))
+;; (eval-after-load 'company '(define-key company-active-map (kbd "<tab>") 'company-complete))
+;; (eval-after-load 'company '(add-to-list 'company-backends 'company-capf))
+;; (setq company-minimum-prefix-length 1)
 
 ;;---------------
 ;; Irony
