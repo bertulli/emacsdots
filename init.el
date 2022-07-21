@@ -65,16 +65,25 @@
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
-;;------------
-;; Various
-;;-------------
+;;;------------
+;;; Various
+;;;-------------
 (global-set-key (kbd "C-x C-c") #'save-buffers-kill-emacs)
+;;(setq debug-on-error t)
+
+(setq gnus-select-method '(nntp "ger.gmane.org"))
 (setq confirm-kill-emacs #'y-or-n-p)
 (tool-bar-mode 0)
 (define-key prog-mode-map (kbd "C-c C-c") 'comment-or-uncomment-region)
 (global-flycheck-mode)
 (add-hook 'cmake-mode-hook 'eldoc-cmake-enable)
 (add-hook 'markdown-mode-hook 'visual-line-mode)
+
+(electric-pair-mode 1)
+(setq electric-pair-preserve-balance nil)
+
+
+(setq tab-always-indent 'complete)
 
 ;;for artist mode
 (add-hook 'artist-mode-hook (lambda () (setq indent-tabs-mode nil)))
