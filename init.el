@@ -65,6 +65,12 @@
 (global-set-key (kbd "M-SPC") 'avy-goto-char-timer)
 (setq avy-style 'pre)
 (setq avy-all-windows nil) ; or t or 'all-frames
+
+;; Consult --------
+(define-key isearch-mode-map (kbd "C-M-s") #'consult-line)
+(global-set-key (kbd "C-h a") #'consult-apropos)
+(setq xref-show-xrefs-function #'consult-xref)
+(setq xref-show-definitions-function #'consult-xref)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
